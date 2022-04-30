@@ -1,0 +1,260 @@
+
+# Вывод информации о версии ОС (дистрибутива Linux)
+alexandr@alexandr-VirtualBox:~$ uname -a
+Linux alexandr-VirtualBox 5.13.0-40-generic #45~20.04.1-Ubuntu SMP Mon Apr 4 09:38:31 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+# посомтреть то же в файле
+alexandr@alexandr-VirtualBox:~$ cat /etc/os-release
+NAME="Ubuntu"
+VERSION="20.04.4 LTS (Focal Fossa)"
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME="Ubuntu 20.04.4 LTS"
+VERSION_ID="20.04"
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+
+# установка службы SSH
+alexandr@alexandr-VirtualBox:~$ sudo apt install openssh-server -y
+[sudo] password for alexandr: 
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following package was automatically installed and is no longer required:
+  libfwupdplugin1
+Use 'sudo apt autoremove' to remove it.
+The following additional packages will be installed:
+  ncurses-term openssh-sftp-server ssh-import-id
+Suggested packages:
+  molly-guard monkeysphere ssh-askpass
+The following NEW packages will be installed:
+  ncurses-term openssh-server openssh-sftp-server ssh-import-id
+0 upgraded, 4 newly installed, 0 to remove and 10 not upgraded.
+Need to get 688 kB of archives.
+After this operation, 6 010 kB of additional disk space will be used.
+Get:1 http://ru.archive.ubuntu.com/ubuntu focal/main amd64 ncurses-term all 6.2-0ubuntu2 [249 kB]
+Get:2 http://ru.archive.ubuntu.com/ubuntu focal-updates/main amd64 openssh-sftp-server amd64 1:8.2p1-4ubuntu0.4 [51,5 kB]
+Get:3 http://ru.archive.ubuntu.com/ubuntu focal-updates/main amd64 openssh-server amd64 1:8.2p1-4ubuntu0.4 [377 kB]
+Get:4 http://ru.archive.ubuntu.com/ubuntu focal/main amd64 ssh-import-id all 5.10-0ubuntu1 [10,0 kB]
+Fetched 688 kB in 0s (2 025 kB/s)
+Preconfiguring packages ...
+Selecting previously unselected package ncurses-term.
+(Reading database ... 178306 files and directories currently installed.)
+Preparing to unpack .../ncurses-term_6.2-0ubuntu2_all.deb ...
+Unpacking ncurses-term (6.2-0ubuntu2) ...
+Selecting previously unselected package openssh-sftp-server.
+Preparing to unpack .../openssh-sftp-server_1%3a8.2p1-4ubuntu0.4_amd64.deb ...
+Unpacking openssh-sftp-server (1:8.2p1-4ubuntu0.4) ...
+Selecting previously unselected package openssh-server.
+Preparing to unpack .../openssh-server_1%3a8.2p1-4ubuntu0.4_amd64.deb ...
+Unpacking openssh-server (1:8.2p1-4ubuntu0.4) ...
+Selecting previously unselected package ssh-import-id.
+Preparing to unpack .../ssh-import-id_5.10-0ubuntu1_all.deb ...
+Unpacking ssh-import-id (5.10-0ubuntu1) ...
+Setting up openssh-sftp-server (1:8.2p1-4ubuntu0.4) ...
+Setting up openssh-server (1:8.2p1-4ubuntu0.4) ...
+
+Creating config file /etc/ssh/sshd_config with new version
+Creating SSH2 RSA key; this may take some time ...
+3072 SHA256:7eIf5f9Hf1OUW5d6v0mbsPaBU/ANUYioOrBlzSXCCLY root@alexandr-VirtualBox
+ (RSA)
+Creating SSH2 ECDSA key; this may take some time ...
+256 SHA256:E/1/7fxFp++pp6W+0+Bq+D7+yaWkiywXpIeNy3gsAx8 root@alexandr-VirtualBox 
+(ECDSA)
+Creating SSH2 ED25519 key; this may take some time ...
+256 SHA256:5uTM93c9z8nFo0eMJPqtxEZF24c2BmJ8g9dvi37qvvc root@alexandr-VirtualBox 
+(ED25519)
+Created symlink /etc/systemd/system/sshd.service → /lib/systemd/system/ssh.servi
+ce.
+Created symlink /etc/systemd/system/multi-user.target.wants/ssh.service → /lib/s
+ystemd/system/ssh.service.
+rescue-ssh.target is a disabled or a static unit, not starting it.
+Setting up ssh-import-id (5.10-0ubuntu1) ...
+Attempting to convert /etc/ssh/ssh_import_id
+Setting up ncurses-term (6.2-0ubuntu2) ...
+Processing triggers for systemd (245.4-4ubuntu3.15) ...
+Processing triggers for man-db (2.9.1-1) ...
+Processing triggers for ufw (0.36-6ubuntu1) ...
+
+# включить службу SSH
+alexandr@alexandr-VirtualBox:~$ sudo systemctl enable ssh
+Synchronizing state of ssh.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable ssh
+
+# запустить SSH сервер
+alexandr@alexandr-VirtualBox:~$ sudo systemctl start ssh 
+
+# убедимся, что на сервере запущен OpenSSH Server: 
+alexandr@alexandr-VirtualBox:~$ systemctl status sshd
+● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: e>
+     Active: active (running) since Wed 2022-04-27 20:16:09 MSK; 2min 19s ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+   Main PID: 2370 (sshd)
+      Tasks: 1 (limit: 2290)
+     Memory: 1.0M
+     CGroup: /system.slice/ssh.service
+             └─2370 sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+
+апр 27 20:16:09 alexandr-VirtualBox systemd[1]: Starting OpenBSD Secure Shell s>
+апр 27 20:16:09 alexandr-VirtualBox sshd[2370]: Server listening on 0.0.0.0 por>
+апр 27 20:16:09 alexandr-VirtualBox sshd[2370]: Server listening on :: port 22.
+апр 27 20:16:09 alexandr-VirtualBox systemd[1]: Started OpenBSD Secure Shell se>
+
+# посмотреть IP
+alexandr@alexandr-VirtualBox:~$ ip addr
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:32:79:9a brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.106/24 brd 192.168.0.255 scope global dynamic noprefixroute enp0s3
+       valid_lft 6770sec preferred_lft 6770sec
+    inet6 fe80::9e29:c1b1:97cc:c73a/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+	   
+# посмотреть IP без лишней информации	   
+alexandr@alexandr-VirtualBox:~$ hostname -I
+192.168.0.106 
+alexandr@alexandr-VirtualBox:~$ 
+
+# подключаемся клиентом ssh(использую встроенный в windows 10)
+The authenticity of host '192.168.0.106 (192.168.0.106)' can't be established.
+ECDSA key fingerprint is SHA256:E/1/7fxFp++pp6W+0+Bq+D7+yaWkiywXpIeNy3gsAx8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.0.106' (ECDSA) to the list of known hosts.
+alexandr@192.168.0.106's password:
+Welcome to Ubuntu 20.04.4 LTS (GNU/Linux 5.13.0-40-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+0 updates can be applied immediately.
+
+Your Hardware Enablement Stack (HWE) is supported until April 2025.
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+# проверяю работу. Запускаю несколько команд
+alexandr@alexandr-VirtualBox:~$ uname -a
+Linux alexandr-VirtualBox 5.13.0-40-generic #45~20.04.1-Ubuntu SMP Mon Apr 4 09:38:31 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+alexandr@alexandr-VirtualBox:~$ hostname -I
+192.168.0.106
+alexandr@alexandr-VirtualBox:~$ whoami
+alexandr
+alexandr@alexandr-VirtualBox:~$
+
+alexandr@alexandr-VirtualBox:~$ exit
+logout
+Connection to 192.168.0.106 closed.
+
+
+#создаем паку students
+alexandr@alexandr-VirtualBox:~$ mkdir students
+
+#создаем паку mentors
+alexandr@alexandr-VirtualBox:~$ mkdir mentors
+
+#проверяю создание папок
+alexandr@alexandr-VirtualBox:~$ ls
+Desktop    Downloads  Music     Public    Templates
+Documents  mentors    Pictures  students  Videos
+
+#создаем файл students_list.txt в папке students
+alexandr@alexandr-VirtualBox:~$ cd students
+alexandr@alexandr-VirtualBox:~/students$ echo > students_list.txt
+alexandr@alexandr-VirtualBox:~/students$ ls
+students_list.txt
+
+#создаем файл mentors_list.txt в папке mentors
+alexandr@alexandr-VirtualBox:~/students$ cd ..
+alexandr@alexandr-VirtualBox:~$ cd mentors
+alexandr@alexandr-VirtualBox:~/mentors$ echo > mentors_list.txt
+alexandr@alexandr-VirtualBox:~/mentors$ ls
+mentors_list.txt
+
+#записываем данные в файл students_list.txt
+alexandr@alexandr-VirtualBox:~/mentors$ cd ..
+alexandr@alexandr-VirtualBox:~$ cd students
+alexandr@alexandr-VirtualBox:~/students$ nano students_list.txt 
+alexandr@alexandr-VirtualBox:~/students$ less students_list.txt 
+
+
+Дмитрий Алексеев
+
+Антон Подборцев
+
+Максим
+
+Полина Дроздова
+
+Илья Хухров
+
+ЮрийАлександрович Зиновьев
+
+Дамир Кадаев
+
+Михаил Даниленко
+
+РасулСулейманович Омаров
+
+СергейИгоревич Рамзаев
+
+Артем Поспеев
+
+#записываем данные в файл mentors_list.txt
+alexandr@alexandr-VirtualBox:~/students$ cd ..
+alexandr@alexandr-VirtualBox:~$ cd mentors
+alexandr@alexandr-VirtualBox:~/mentors$ nano mentors_list.txt 
+alexandr@alexandr-VirtualBox:~/mentors$ less mentors_list.txt 
+
+Наставник
+Елена Федотова
+
+Преподаватель
+Кирилл Иванов
+
+#перемещаем файл mentors_list.txt в папку students
+alexandr@alexandr-VirtualBox:~/mentors$ mv mentors_list.txt /home/alexandr/students
+alexandr@alexandr-VirtualBox:~/mentors$ ls
+alexandr@alexandr-VirtualBox:~/mentors$ cd ..
+alexandr@alexandr-VirtualBox:~$ cd students
+alexandr@alexandr-VirtualBox:~/students$ ls
+mentors_list.txt  students_list.txt
+alexandr@alexandr-VirtualBox:~/students$ 
+
+#удаляю папку mentors
+alexandr@alexandr-VirtualBox:~/students$ cd ..
+alexandr@alexandr-VirtualBox:~$ rmdir mentors
+alexandr@alexandr-VirtualBox:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  students  Templates  Videos
+alexandr@alexandr-VirtualBox:~$ 
+
+#переименовываю папку students в students_and_mentors
+lexandr@alexandr-VirtualBox:~$ mv students students_and_mentors
+alexandr@alexandr-VirtualBox:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  students_and_mentors  Templates  Videos
+
+#удаляю папку students_and_mentors со всем содержимым
+alexandr@alexandr-VirtualBox:~$ rm -R students_and_mentors
+alexandr@alexandr-VirtualBox:~$ ls
+Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos
+alexandr@alexandr-VirtualBox:~$ 
+
+
+
+
